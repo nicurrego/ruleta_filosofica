@@ -41,6 +41,7 @@ function HomeContent() {
   const [winner, setWinner] = useState<WheelEntry | null>(null);
   const [phraseScreenWinner, setPhraseScreenWinner] = useState<WheelEntry | null>(null);
   const [previewPhase, setPreviewPhase] = useState<PreviewPhase>('intro');
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
   const wheelRef = useRef<WheelRef>(null);
   
   // Settings
@@ -90,6 +91,49 @@ function HomeContent() {
       soundManager.playWheelAppears();
     }
   }, [previewPhase]);
+
+  // AUTO-PLAY LOGIC
+  useEffect(() => {
+    if (!isAutoPlay) return;
+
+    let timer: NodeJS.Timeout;
+
+    const advance = (next: PreviewPhase, delay: number) => {
+      timer = setTimeout(() => setPreviewPhase(next), delay);
+    };
+
+    switch (previewPhase) {
+      case 'intro':
+        advance('wheel', 3000);
+        break;
+      case 'wheel':
+        if (!winner) {
+          // Wait for wheel entry animation then spin
+          timer = setTimeout(() => {
+            wheelRef.current?.spin();
+          }, 1500);
+        } else {
+          // Winner found, wait for celebration then go to overview
+          advance('monthly-overview', 5000);
+        }
+        break;
+      case 'monthly-overview':
+        advance('candidate-reveal', 5000);
+        break;
+      case 'candidate-reveal':
+        advance('scarcity', 5000);
+        break;
+      case 'scarcity':
+        advance('cta', 5000);
+        break;
+      case 'cta':
+        // Stay on CTA or stop
+        timer = setTimeout(() => setIsAutoPlay(false), 8000);
+        break;
+    }
+
+    return () => clearTimeout(timer);
+  }, [isAutoPlay, previewPhase, winner]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -240,6 +284,24 @@ function HomeContent() {
               {(previewPhase === 'wheel' && !winner) ? 'Siguiente (GIRAR) →' : 'Siguiente →'}
             </button>
           </div>
+
+          <button 
+            className={`button ${isAutoPlay ? 'button-secondary' : 'button-primary'}`}
+            style={{ width: '100%', marginBottom: '10px', background: isAutoPlay ? 'rgba(239, 68, 68, 0.2)' : undefined, borderColor: isAutoPlay ? '#ef4444' : undefined, color: isAutoPlay ? '#ef4444' : undefined }}
+            onClick={() => {
+              if (isAutoPlay) {
+                setIsAutoPlay(false);
+              } else {
+                setWinner(null);
+                setPhraseScreenWinner(null);
+                setPreviewPhase('intro');
+                setIsAutoPlay(true);
+              }
+            }}
+          >
+            {isAutoPlay ? '⏹ DETENER AUTOMÁTICO' : '▶️ REPRODUCIR AUTOMÁTICO'}
+          </button>
+
           <button 
             className="button button-secondary" 
             style={{ width: '100%', color: '#ef4444' }}
@@ -247,6 +309,7 @@ function HomeContent() {
               setPreviewPhase('intro');
               setWinner(null);
               setPhraseScreenWinner(null);
+              setIsAutoPlay(false);
             }}
           >
             <RotateCcw size={16} /> REINICIAR TODO
