@@ -4,6 +4,9 @@ export class SoundManager {
   private transitionAudio: HTMLAudioElement | null = null;
   private tickAudio: HTMLAudioElement | null = null;
   private whooshAudio: HTMLAudioElement | null = null;
+  private introNotificationAudio: HTMLAudioElement | null = null;
+  private wheelAppearsAudio: HTMLAudioElement | null = null;
+  private applauseAudio: HTMLAudioElement | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -16,13 +19,18 @@ export class SoundManager {
       this.transitionAudio = new Audio('/screen-transition.wav');
       this.transitionAudio.volume = 0.85;
 
-      // Tick sound — now using the provided audio file
+      // Tick sound — new "gamer" variant
       this.tickAudio = new Audio('/tick.wav');
       this.tickAudio.volume = 0.5;
 
-      // Whoosh sound — now using the provided audio file
+      // Whoosh sound
       this.whooshAudio = new Audio('/wheel-whoosh.wav');
       this.whooshAudio.volume = 0.8;
+
+      // NEW SOUNDS
+      this.introNotificationAudio = new Audio('/ruleta_filosofica_notification.wav');
+      this.wheelAppearsAudio = new Audio('/wheel_appears.wav');
+      this.applauseAudio = new Audio('/girls_applause.wav');
     }
   }
 
@@ -56,25 +64,39 @@ export class SoundManager {
     }
   }
 
-  /**
-   * Plays the tick sound file.
-   */
   public playTick() {
     if (this.tickAudio) {
-      // Clone the node so we can play overlapping ticks if they happen fast
       const click = this.tickAudio.cloneNode() as HTMLAudioElement;
       click.volume = 0.4;
       click.play().catch(e => {});
     }
   }
 
-  /**
-   * Plays the dramatic whoosh sound file.
-   */
   public playDramaticWhoosh() {
     if (this.whooshAudio) {
       this.whooshAudio.currentTime = 0;
       this.whooshAudio.play().catch(e => console.error('Whoosh audio play failed', e));
+    }
+  }
+
+  public playIntroNotification() {
+    if (this.introNotificationAudio) {
+      this.introNotificationAudio.currentTime = 0;
+      this.introNotificationAudio.play().catch(e => console.error('Intro notification play failed', e));
+    }
+  }
+
+  public playWheelAppears() {
+    if (this.wheelAppearsAudio) {
+      this.wheelAppearsAudio.currentTime = 0;
+      this.wheelAppearsAudio.play().catch(e => console.error('Wheel appears play failed', e));
+    }
+  }
+
+  public playApplause() {
+    if (this.applauseAudio) {
+      this.applauseAudio.currentTime = 0;
+      this.applauseAudio.play().catch(e => console.error('Applause play failed', e));
     }
   }
 }

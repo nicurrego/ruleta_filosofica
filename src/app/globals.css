@@ -50,9 +50,9 @@ body {
 /* ====================== */
 /*   ANIMATED BACKGROUND  */
 /* ====================== */
-body::before {
+.recording-pane::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   background:
     radial-gradient(ellipse 80% 60% at 20% -10%,  rgba(139, 92, 246, 0.25) 0%, transparent 60%),
@@ -69,9 +69,9 @@ body::before {
 }
 
 /* Floating particles */
-body::after {
+.recording-pane::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-image:
     radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
@@ -197,15 +197,69 @@ body::after {
 /* Full screen beautiful flexible layout */
 .app-container {
   display: flex;
-  flex-direction: column;
   height: 100svh;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  gap: 0;
-  position: relative;
+  width: 100vw;
+  background: #000;
   overflow: hidden;
 }
+
+/* LEFT SIDE: Recording Pane */
+.recording-pane {
+  flex: 0 0 auto;
+  width: min(calc(100vh * 9 / 16), 100vw);
+  height: 100vh;
+  position: relative;
+  background: var(--bg-dark);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* RIGHT SIDE: Dev Controls Pane */
+.dev-pane {
+  flex: 1;
+  background: #111;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dev-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.dev-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.dev-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.dev-section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.dev-section h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  color: var(--text-muted);
+}
+
 
 /* ====================== */
 /*   HEADER               */
@@ -253,6 +307,7 @@ body::after {
   flex: 1;
   min-height: 0;
   position: relative;
+  width: 100%;
 }
 
 .wheel-section {
@@ -271,20 +326,12 @@ body::after {
 }
 
 .sidebar-section {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 16px 12px;
-  background: var(--bg-glass);
-  backdrop-filter: blur(24px);
-  border-left: 1px solid var(--border-glass);
-  overflow-y: auto;
-  z-index: 50;
+  background: transparent;
+  border: none;
+  overflow-y: visible;
 }
 
 /* ====================== */
@@ -296,7 +343,7 @@ body::after {
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: min(80vh, 90vw);  /* scale gorgeously while fitting the screen height */
+  width: 90%;
   aspect-ratio: 1 / 1;
 }
 
@@ -505,7 +552,7 @@ body::after {
 /*   WINNER MODAL         */
 /* ====================== */
 .modal-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(12px);
@@ -693,7 +740,7 @@ body::after {
 /*   PHRASE SCREEN — TIKTOK OPTIMIZED */
 /* ====================== */
 .phrase-screen-overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 2000;
   overflow: hidden;

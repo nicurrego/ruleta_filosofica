@@ -1,5 +1,4 @@
-'use client';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { soundManager } from '../utils/sounds';
 
 export type WheelEntry = {
@@ -9,6 +8,10 @@ export type WheelEntry = {
 };
 
 export type ArrowDesignType = 'classic' | 'triangle' | 'pin' | 'hand' | 'star' | 'kibo' | 'custom';
+
+export interface WheelRef {
+  spin: () => void;
+}
 
 interface WheelProps {
   entries: WheelEntry[];
@@ -20,12 +23,26 @@ interface WheelProps {
   autoSpin?: boolean;
 }
 
-export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', customArrowUrl, centerText, disabled = false, autoSpin = false }: WheelProps) {
+const Wheel = forwardRef<WheelRef, WheelProps>(({ 
+  entries, 
+  onSpinEnd, 
+  arrowDesign = 'classic', 
+  customArrowUrl, 
+  centerText, 
+  disabled = false, 
+  autoSpin = false 
+}, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const currentRotation = useRef(0);
   const animationRef = useRef<number | null>(null);
   const prevIndexRef = useRef<number>(-1);
+
+  useImperativeHandle(ref, () => ({
+    spin: () => {
+      spin();
+    }
+  }));
 
   useEffect(() => {
     drawWheel();
@@ -127,11 +144,6 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
       ctx.fillText(displayName, radius * 0.85, 0);
       ctx.restore();
     });
-    
-    
-    // Do NOT draw center dot on canvas anymore. 
-    // It's handled by HTML overlay .wheel-center-button for better text rendering and double tap capturing
-
     ctx.restore();
   }
 
@@ -199,10 +211,7 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
       // Play tick when crossing segment boundary
       if (currentIndex !== prevIndexRef.current) {
         prevIndexRef.current = currentIndex;
-        // Only tick when slowing down (last 40% of spin) to build tension
-        if (progress > 0.6) {
-          soundManager.playTick();
-        }
+        soundManager.playTick();
       }
 
       if (progress < 1) {
@@ -211,6 +220,7 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
         setIsSpinning(false);
         soundManager.stopSpin();
         soundManager.playWin();
+        soundManager.playApplause();
         onSpinEnd(entries[currentIndex]);
       }
     };
@@ -235,22 +245,6 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
     }
   }, [autoSpin, entries.length]);
 
-  const spinRef = useRef(spin);
-  useEffect(() => {
-    spinRef.current = spin;
-  }, [spin]);
-
-  useEffect(() => {
-    const handleGlobalClick = (e: MouseEvent) => {
-      if (disabled) return;
-      // Ignore click if clicking settings or something
-      if ((e.target as HTMLElement).closest('button, a, input')) return;
-      spinRef.current();
-    };
-    window.addEventListener('click', handleGlobalClick);
-    return () => window.removeEventListener('click', handleGlobalClick);
-  }, [disabled]);
-
   // Re-draw on window resize to keep high res
   useEffect(() => {
     const handleResize = () => drawWheel();
@@ -261,7 +255,7 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
   }, [entries]);
 
   return (
-    <div className="canvas-container" onClick={spin} style={{ touchAction: 'none' }}>
+    <div className="canvas-container" style={{ touchAction: 'none' }}>
       <div className={`pointer-wrapper design-${arrowDesign}`}>
         {arrowDesign === 'kibo' ? (
           <img src="/kibo_icon.png" alt="kibo pointer" className="custom-pointer kibo-pointer" />
@@ -301,8 +295,12 @@ export default function Wheel({ entries, onSpinEnd, arrowDesign = 'classic', cus
 
       <canvas 
         ref={canvasRef} 
-        style={{ width: '100%', height: '100%', cursor: isSpinning || entries.length === 0 ? 'default' : 'pointer', display: 'block' }}
+        style={{ width: '100%', height: '100%', cursor: 'default', display: 'block' }}
       />
     </div>
   );
-}
+});
+
+Wheel.displayName = 'Wheel';
+export default Wheel;
+

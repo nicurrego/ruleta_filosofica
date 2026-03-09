@@ -65,3 +65,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
+export async function PATCH() {
+  try {
+    if (!fs.existsSync(CSV_FILE)) {
+      return NextResponse.json({ error: 'Database not found' }, { status: 404 });
+    }
+
+    const csvText = fs.readFileSync(CSV_FILE, 'utf-8');
+    const results = Papa.parse<PhraseRow>(csvText, {
+      header: true,
+      skipEmptyLines: true,
+    });
+
+    // Reset all phrases
+    const resetData = results.data.map(row => ({
+      ...row,
+      USADA: 'FALSE',
+      FECHA_USADA: ''
+    }));
+
+    const newCsv = Papa.unparse(resetData);
+    fs.writeFileSync(CSV_FILE, newCsv, 'utf-8');
+
+    return NextResponse.json({ success: true, message: 'All phrases reset' });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

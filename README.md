@@ -1,44 +1,81 @@
-# Ruleta Filosófica (Spinner Wheel)
+# 🎡 Ruleta Filosófica
 
-A beautiful, high-performance spinner wheel built with Next.js, React, and HTML5 Canvas.
+An autonomous TikTok/Reels/Shorts content generator built with Next.js. A beautiful spinner wheel reveals daily philosophical phrases across 8 life topics with cinematic animations, scarcity mechanics, and engagement-driven CTAs.
 
-## Features
+## ✨ Features
 
-- **High-Performance Canvas Spinner**: Custom `<canvas>` implementation with crisp rendering on all screen sizes, including high-DPI displays.
-- **Glassmorphic Design**: Modern, premium dark mode UI with glass effects and subtle glowing gradients.
-- **Dynamic Entries**: Add, edit, or remove entries in real-time via the sidebar.
-- **Smooth Animation**: Satisfying easing functions (`easeOutQuart`) for the wheel spin.
-- **Winner Celebration**: Animated modal with confetti effects when a winner is chosen.
-- **Responsive**: Fully responsive layout for desktop and mobile devices.
+- **Canvas Spinner Wheel** — Custom `<canvas>` implementation with crisp HiDPI rendering and 8 vibrant topic segments
+- **6-Scene Recording Flow** — Intro → Wheel → Winner → Monthly Overview → Phrase Reveal → CTA
+- **Monthly Scarcity System** — 4 phrases per topic per month; exhausted topics are removed from the wheel
+- **Director's Panel** — Side-by-side dev controls + 9:16 recording pane for easy screen recording
+- **Immersive Animations** — Framer Motion shared layouts, staggered entries, spring physics, and pulsing CTAs
+- **SFX System** — 8 synchronized sound effects (spin, tick, win, applause, transitions)
+- **Bot Mode** — Headless autonomous mode via `?bot=true` URL param
+- **Localized Canvas Confetti** — Confetti contained within the recording pane (not full-page)
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/) (App Router)
-- **Language**: TypeScript
-- **Styling**: Vanilla CSS (CSS Modules & Global Styles)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Animation**: [canvas-confetti](https://www.npmjs.com/package/canvas-confetti) for winner modal
+| Layer | Technology |
+|-------|-----------|
+| Framework | [Next.js](https://nextjs.org/) (App Router) |
+| Language | TypeScript |
+| Animation | [Framer Motion](https://www.framer.com/motion/) |
+| Confetti | [canvas-confetti](https://www.npmjs.com/package/canvas-confetti) |
+| Icons | [Lucide React](https://lucide.dev/) |
+| CSV Parsing | [PapaParse](https://www.papaparse.com/) |
+| Styling | Vanilla CSS |
 
-## Getting Started
-
-First, install the dependencies:
+## 🚀 Getting Started
 
 ```bash
 npm install
-```
-
-Then, run the development server:
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Usage
+## 📂 Project Structure
 
-1. Enter names or options in the text area on the right (one per line).
-2. Click the central wheel to start the spin.
-3. When the wheel stops, a modal will announce the winner.
-4. You can choose to "Remove" the winner from the list or just "Close" the modal.
-5. Use the "Shuffle Names" button to randomize the order of options on the wheel.
+```
+src/
+├── app/
+│   ├── api/phrases/route.ts   # CSV read/write API
+│   ├── phrases/page.tsx       # Phrase management page
+│   ├── globals.css            # All styles
+│   ├── layout.tsx             # Root layout
+│   └── page.tsx               # Main app (orchestrator + dev panel)
+├── components/
+│   ├── Wheel.tsx              # Canvas wheel with spin mechanics
+│   ├── WinnerModal.tsx        # Confetti overlay
+│   └── PhraseScreen.tsx       # Phases 3–6 (overview, reveal, scarcity, CTA)
+└── utils/
+    └── sounds.ts              # SoundManager singleton
+
+public/                        # Audio assets (.wav)
+scripts/
+├── export-tiktok.js           # Headless browser recording script
+└── init-csv.ts                # CSV database initializer
+
+database.csv                   # Phrase database (CSV)
+flow.md                        # Director's Playbook (scene-by-scene documentation)
+```
+
+## 🎬 Recording a Video
+
+See [`flow.md`](./flow.md) for the complete Director's Playbook with scene breakdowns, animation specs, and sound cue maps.
+
+**Quick steps:**
+1. Open the app → Dev Panel is on the right
+2. Click **Siguiente** to advance through each scene
+3. Screen-record the left pane (9:16 ratio)
+4. Click **REINICIAR TODO** to loop
+
+## 🤖 Bot Mode
+
+Append `?bot=true` to the URL for fully autonomous content generation. The wheel will auto-spin and the flow will advance without human interaction.
+
+## 📊 Managing Phrases
+
+- Navigate to `/phrases` for the phrase management UI
+- Use **Reset BD** in the Dev Panel to mark all phrases as unused
+- The CSV database (`database.csv`) tracks: `TEMA`, `FRASE`, `USADA`, `FECHA_USADA`
