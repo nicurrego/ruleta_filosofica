@@ -1,66 +1,77 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import { useState } from 'react';
+import Wheel from '../components/Wheel';
+import WinnerModal from '../components/WinnerModal';
+import { Shuffle } from 'lucide-react';
+
+const DEFAULT_NAMES = [
+  'Ali', 'Beatriz', 'Charles', 'Diya', 'Eric', 'Fatima', 'Gabriel', 'Hanna'
+];
 
 export default function Home() {
+  const [namesText, setNamesText] = useState(DEFAULT_NAMES.join('\n'));
+  const [winner, setWinner] = useState<string | null>(null);
+
+  // Parse text into array of non-empty strings
+  const names = namesText.split('\n').map(n => n.trim()).filter(n => n);
+
+  const handleShuffle = () => {
+    const shuffled = [...names].sort(() => Math.random() - 0.5);
+    setNamesText(shuffled.join('\n'));
+  };
+
+  const handleRemoveWinner = () => {
+    if (!winner) return;
+    const newNames = names.filter(n => n !== winner);
+    setNamesText(newNames.join('\n'));
+    setWinner(null);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="app-container">
+      <header className="header">
+        <h1>Spinner Wheel</h1>
+        <p>A random choice generator</p>
+      </header>
+      
+      <main className="main-content">
+        <section className="wheel-section glass-container">
+          <Wheel 
+            names={names} 
+            onSpinEnd={(w) => setWinner(w)} 
+          />
+        </section>
+
+        <section className="sidebar-section glass-container">
+          <div className="sidebar-header">
+            <h2>Entries</h2>
+            <div className="count-badge">{names.length}</div>
+          </div>
+          
+          <textarea
+            value={namesText}
+            onChange={(e) => setNamesText(e.target.value)}
+            placeholder={"Enter names here...\nOne name per line"}
+            spellCheck={false}
+          />
+          
+          <button 
+            className="button button-primary"
+            onClick={handleShuffle}
+            disabled={names.length < 2}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <Shuffle size={18} /> Shuffle Names
+          </button>
+        </section>
       </main>
+
+      {winner && (
+        <WinnerModal 
+          winner={winner} 
+          onClose={() => setWinner(null)} 
+          onRemove={handleRemoveWinner} 
+        />
+      )}
     </div>
   );
 }
