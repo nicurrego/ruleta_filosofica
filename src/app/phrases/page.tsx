@@ -118,7 +118,7 @@ export default function PhrasesPage() {
             </button>
           </Link>
           <div>
-            <h1 style={{ fontFamily: 'Outfit', fontWeight: 900, background: 'linear-gradient(135deg, #c084fc, #f43f5e)', WebkitBackgroundClip: 'text', color: 'transparent', fontSize: '2rem' }}>
+            <h1 className="main-title-gradient" style={{ fontFamily: 'Outfit', fontWeight: 900, fontSize: '2rem' }}>
               Base de Datos
             </h1>
             <p style={{ color: 'var(--text-muted)' }}>Tabla combinada ({totalCount} total)</p>

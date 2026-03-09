@@ -272,19 +272,23 @@ body {
   z-index: 100;
 }
 
-.header h1 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.9rem;
-  font-weight: 900;
+.main-title-gradient {
   background: linear-gradient(135deg, #c084fc, #f43f5e, #facc15);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 0 20px rgba(168,85,247,0.6));
   animation: titleShimmer 3s ease-in-out infinite alternate;
+}
+
+.header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.5px;
 }
+
 
 @keyframes titleShimmer {
   0%  { filter: drop-shadow(0 0 16px rgba(168,85,247,0.5)); }

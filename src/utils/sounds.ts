@@ -7,6 +7,9 @@ export class SoundManager {
   private introNotificationAudio: HTMLAudioElement | null = null;
   private wheelAppearsAudio: HTMLAudioElement | null = null;
   private applauseAudio: HTMLAudioElement | null = null;
+  private airWhooshAudio: HTMLAudioElement | null = null;
+  private scrollSwooshAudio: HTMLAudioElement | null = null;
+  private winnerExpansionAudio: HTMLAudioElement | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -31,6 +34,9 @@ export class SoundManager {
       this.introNotificationAudio = new Audio('/ruleta_filosofica_notification.wav');
       this.wheelAppearsAudio = new Audio('/wheel_appears.wav');
       this.applauseAudio = new Audio('/girls_applause.wav');
+      this.airWhooshAudio = new Audio('/air_whoosh_to_mothly_overview.wav');
+      this.scrollSwooshAudio = new Audio('/scroll_up_swoosh.wav');
+      this.winnerExpansionAudio = new Audio('/winner_topic_2colum_1column.wav');
     }
   }
 
@@ -97,6 +103,27 @@ export class SoundManager {
     if (this.applauseAudio) {
       this.applauseAudio.currentTime = 0;
       this.applauseAudio.play().catch(e => console.error('Applause play failed', e));
+    }
+  }
+
+  public playAirWhoosh() {
+    if (this.airWhooshAudio) {
+      this.airWhooshAudio.currentTime = 0;
+      this.airWhooshAudio.play().catch(e => console.error('Air Whoosh play failed', e));
+    }
+  }
+  
+  public playScrollSwoosh() {
+    if (this.scrollSwooshAudio) {
+      this.scrollSwooshAudio.currentTime = 0;
+      this.scrollSwooshAudio.play().catch(e => console.error('Scroll Swoosh play failed', e));
+    }
+  }
+
+  public playWinnerExpansion() {
+    if (this.winnerExpansionAudio) {
+      this.winnerExpansionAudio.currentTime = 0;
+      this.winnerExpansionAudio.play().catch(e => console.error('Winner Expansion play failed', e));
     }
   }
 }

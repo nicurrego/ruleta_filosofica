@@ -168,11 +168,11 @@ function HomeContent() {
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
             >
               <motion.h1
+                className="main-title-gradient"
                 style={{
                   fontFamily: 'Outfit',
                   fontWeight: 900,
                   fontSize: '3.5rem',
-                  color: 'white',
                   textAlign: 'center',
                   textTransform: 'uppercase',
                   letterSpacing: '4px',
@@ -194,7 +194,11 @@ function HomeContent() {
               style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}
             >
               <header className="header" style={{ paddingTop: '100px', background: 'transparent' }}>
-                <motion.h1 layoutId="main-title" style={{ fontSize: '2.2rem', textTransform: 'uppercase', letterSpacing: '4px', fontWeight: 900 }}>
+                <motion.h1 
+                  layoutId="main-title" 
+                  className="main-title-gradient"
+                  style={{ fontSize: '2.2rem', textTransform: 'uppercase', letterSpacing: '4px', fontWeight: 900 }}
+                >
                   Ruleta Filosófica
                 </motion.h1>
                 <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
@@ -210,7 +214,7 @@ function HomeContent() {
                     onSpinEnd={handleSpinEnd} 
                     arrowDesign={arrowDesign}
                     customArrowUrl={customArrowUrl}
-                    centerText=""
+                    centerText={"LIKE\nPARA GIRAR!"}
                     disabled={!!winner || !!phraseScreenWinner || entries.length === 0}
                     autoSpin={isBotMode}
                   />
