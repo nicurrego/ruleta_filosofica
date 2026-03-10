@@ -182,7 +182,8 @@ This scene has a complex choreographed sequence:
 - **Entry Sound:** Plays `wheel-win.wav` during the phase transition.
 - **Badge Reveal:** "Ganador: {Tema}" appears at 0.5s with `ruleta_filosofica_notification.wav`.
 - **Phrase Spotlight:** The full quote and author reveal at 1.5s with a dramatic `phrase_sound.wav`.
-- **Bounce Hint:** A white chevron bounces at the bottom to lead into the final CTA.
+- **Urgency Sync:** After 3s of high-quality silence with the quote, `arcade-tick.wav` plays at 4.8s total.
+- **Auto-Finish:** 1s after the urgency sound, the screen automatically moves to the final **Scene 5**.
 
 ---
 

@@ -11,12 +11,13 @@ export class SoundManager {
   private scrollSwooshAudio: HTMLAudioElement | null = null;
   private winnerExpansionAudio: HTMLAudioElement | null = null;
   private phraseRevealAudio: HTMLAudioElement | null = null;
+  private urgencyAudio: HTMLAudioElement | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
       this.spinAudio = new Audio('/wheel-spin.wav');
       this.spinAudio.loop = true;
-      
+
       this.winAudio = new Audio('/wheel-win.wav');
 
       // Screen transition sound — played when switching to the phrase screen
@@ -39,6 +40,7 @@ export class SoundManager {
       this.scrollSwooshAudio = new Audio('/scroll_up_swoosh.wav');
       this.winnerExpansionAudio = new Audio('/winner_topic_2colum_1column.wav');
       this.phraseRevealAudio = new Audio('/phrase_sound.wav');
+      this.urgencyAudio = new Audio('/arcade-tick.wav');
     }
   }
 
@@ -76,7 +78,7 @@ export class SoundManager {
     if (this.tickAudio) {
       const click = this.tickAudio.cloneNode() as HTMLAudioElement;
       click.volume = 0.4;
-      click.play().catch(e => {});
+      click.play().catch(e => { });
     }
   }
 
@@ -114,7 +116,7 @@ export class SoundManager {
       this.airWhooshAudio.play().catch(e => console.error('Air Whoosh play failed', e));
     }
   }
-  
+
   public playScrollSwoosh() {
     if (this.scrollSwooshAudio) {
       this.scrollSwooshAudio.currentTime = 0;
@@ -133,6 +135,13 @@ export class SoundManager {
     if (this.phraseRevealAudio) {
       this.phraseRevealAudio.currentTime = 0;
       this.phraseRevealAudio.play().catch(e => console.error('Phrase Reveal play failed', e));
+    }
+  }
+
+  public playUrgency() {
+    if (this.urgencyAudio) {
+      this.urgencyAudio.currentTime = 0;
+      this.urgencyAudio.play().catch(e => console.error('Urgency audio play failed', e));
     }
   }
 }

@@ -23,6 +23,7 @@ export const ALL_TOPICS = [
 const BASE_TOPICS = ALL_TOPICS;
 
 const PREVIEW_PHASES = [
+  'black-screen',
   'intro',
   'wheel',
   'monthly-overview',
@@ -39,10 +40,10 @@ function HomeContent() {
   const [entries, setEntries] = useState<WheelEntry[]>([]);
   const [winner, setWinner] = useState<WheelEntry | null>(null);
   const [phraseScreenWinner, setPhraseScreenWinner] = useState<WheelEntry | null>(null);
-  const [previewPhase, setPreviewPhase] = useState<PreviewPhase>('intro');
+  const [previewPhase, setPreviewPhase] = useState<PreviewPhase>('black-screen');
   const [isAutoPlay, setIsAutoPlay] = useState(false);
   const wheelRef = useRef<WheelRef>(null);
-  
+
   // Settings
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [arrowDesign, setArrowDesign] = useState<ArrowDesignType>('kibo');
@@ -54,7 +55,7 @@ function HomeContent() {
         const res = await fetch('/api/phrases');
         const data = await res.json();
         const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
-        
+
         const countsThisMonth: Record<string, number> = {};
         if (data.rows) {
           for (const row of data.rows) {
@@ -63,13 +64,13 @@ function HomeContent() {
             }
           }
         }
-        
+
         // Filter out topics that have reached 4 this month
         const validEntries = BASE_TOPICS.filter(t => (countsThisMonth[t.id] || 0) < 4).map(topic => ({
           ...topic,
           text: topic.id === 'EXITO' ? 'ÉXITO' : topic.id
         }));
-        
+
         setEntries(validEntries);
       } catch (err) {
         console.error(err);
@@ -84,11 +85,7 @@ function HomeContent() {
 
   // Trigger sounds on phase changes
   useEffect(() => {
-    if (previewPhase === 'intro') {
-      soundManager.playIntroNotification();
-    } else if (previewPhase === 'wheel') {
-      soundManager.playWheelAppears();
-    }
+    // Moved sound triggers to onClick/automatic advance for perfect sync
   }, [previewPhase]);
 
   // AUTO-PLAY LOGIC
@@ -152,16 +149,31 @@ function HomeContent() {
   return (
     <div className="app-container">
       {/* 1. LEFT PANE: THE VIDEO STAGE (ZONA SEGURA) */}
-      <div className="recording-pane" style={{ background: previewPhase === 'intro' ? '#000' : 'var(--bg-dark)' }}>
+      <div className="recording-pane" style={{ background: ['black-screen', 'intro'].includes(previewPhase) ? '#000' : 'var(--bg-dark)' }}>
         <AnimatePresence mode="wait">
-          {previewPhase === 'intro' ? (
-            <motion.div 
-              key="intro" 
+          {previewPhase === 'black-screen' ? (
+            <motion.div
+              key="black-screen"
+              className="recording-safe-area"
+              style={{ background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              exit={{ opacity: 0 }}
+            >
+              {/* Ghost title to enable the "move to center" animation on the first click */}
+              <motion.h1
+                layoutId="main-title"
+                style={{ opacity: 0, position: 'absolute', top: '100px' }}
+              >
+                Ruleta Filosófica
+              </motion.h1>
+            </motion.div>
+          ) : previewPhase === 'intro' ? (
+            <motion.div
+              key="intro"
               className="recording-safe-area"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%', background: '#000' }}
             >
               <motion.h1
                 className="main-title-gradient"
@@ -177,12 +189,12 @@ function HomeContent() {
                 }}
                 layoutId="main-title"
               >
-                Ruleta<br/>Filosófica
+                Ruleta<br />Filosófica
               </motion.h1>
             </motion.div>
           ) : (previewPhase === 'wheel') ? (
-            <motion.div 
-              key="wheel-screen" 
+            <motion.div
+              key="wheel-screen"
               className="recording-safe-area"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -190,8 +202,8 @@ function HomeContent() {
               style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%' }}
             >
               <header className="header" style={{ paddingTop: '100px', background: 'transparent' }}>
-                <motion.h1 
-                  layoutId="main-title" 
+                <motion.h1
+                  layoutId="main-title"
                   className="main-title-gradient"
                   style={{ fontSize: '2.2rem', textTransform: 'uppercase', letterSpacing: '4px', fontWeight: 900 }}
                 >
@@ -201,13 +213,13 @@ function HomeContent() {
                   ¿Cuál será el Tema de hoy?
                 </motion.p>
               </header>
-              
+
               <main className="main-content">
                 <div className="wheel-section">
-                  <Wheel 
-                    ref={wheelRef} 
-                    entries={entries} 
-                    onSpinEnd={handleSpinEnd} 
+                  <Wheel
+                    ref={wheelRef}
+                    entries={entries}
+                    onSpinEnd={handleSpinEnd}
                     arrowDesign={arrowDesign}
                     customArrowUrl={customArrowUrl}
                     centerText={"LIKE\nPARA GIRAR!"}
@@ -219,26 +231,26 @@ function HomeContent() {
 
               <AnimatePresence>
                 {(winner && previewPhase === 'wheel') && (
-                  <WinnerModal 
+                  <WinnerModal
                     key="winner-modal"
-                    winner={winner.text} 
-                    winnerColor={winner.color} 
+                    winner={winner.text}
+                    winnerColor={winner.color}
                   />
                 )}
               </AnimatePresence>
             </motion.div>
           ) : (
-            <motion.div 
+            <motion.div
               key="phrase-screen-container"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               style={{ width: '100%', height: '100%' }}
             >
-              <PhraseScreen 
+              <PhraseScreen
                 key={phraseScreenWinner?.id || previewPhase}
-                topicId={phraseScreenWinner?.id || winner?.id || (previewPhase === 'monthly-overview' ? 'DINERO' : 'EXITO')} 
-                topicColor={phraseScreenWinner?.color || winner?.color || (previewPhase === 'monthly-overview' ? '#00ffa3' : '#ffbd00')} 
+                topicId={phraseScreenWinner?.id || winner?.id || (previewPhase === 'monthly-overview' ? 'DINERO' : 'EXITO')}
+                topicColor={phraseScreenWinner?.color || winner?.color || (previewPhase === 'monthly-overview' ? '#00ffa3' : '#ffbd00')}
                 onClose={() => { setPhraseScreenWinner(null); setWinner(null); setPreviewPhase('wheel'); }}
                 forcePhase={previewPhase && !['intro', 'wheel'].includes(previewPhase) ? (previewPhase as any) : undefined}
               />
@@ -256,7 +268,7 @@ function HomeContent() {
         <div className="dev-section">
           <h3>Control de Pantalla</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <button 
+            <button
               className="button button-secondary"
               onClick={() => {
                 const idx = PREVIEW_PHASES.indexOf(previewPhase);
@@ -266,26 +278,38 @@ function HomeContent() {
             >
               ← Anterior
             </button>
-            <button 
+            <button
               className="button button-primary"
               onClick={() => {
                 const isWheelPhase = previewPhase === 'wheel';
                 const hasWinner = !!winner;
-                
+
                 if (isWheelPhase && !hasWinner) {
                   wheelRef.current?.spin();
                 } else {
                   const idx = PREVIEW_PHASES.indexOf(previewPhase);
                   const nextIdx = (idx + 1) % PREVIEW_PHASES.length;
-                  setPreviewPhase(PREVIEW_PHASES[nextIdx]);
+                  const nextPhase = PREVIEW_PHASES[nextIdx];
+
+                  // Play sound with 0.3s delay to match animation breathe
+                  if (nextPhase === 'intro') {
+                    setTimeout(() => soundManager.playIntroNotification(), 300);
+                  } else if (nextPhase === 'wheel') {
+                    setTimeout(() => soundManager.playWheelAppears(), 300);
+                  } else if (nextPhase === 'monthly-overview') {
+                    // Start immediately on click as requested
+                    soundManager.playAirWhoosh(); // Transition whoosh sound moved to page.tsx onClick for instant start
+                  }
+
+                  setPreviewPhase(nextPhase);
                 }
               }}
             >
-              {(previewPhase === 'wheel' && !winner) ? 'Siguiente (GIRAR) →' : 'Siguiente →'}
+              {previewPhase === 'cta' ? 'FIN' : (previewPhase === 'wheel' && !winner) ? 'Siguiente (GIRAR) →' : 'Siguiente →'}
             </button>
           </div>
 
-          <button 
+          <button
             className={`button ${isAutoPlay ? 'button-secondary' : 'button-primary'}`}
             style={{ width: '100%', marginBottom: '10px', background: isAutoPlay ? 'rgba(239, 68, 68, 0.2)' : undefined, borderColor: isAutoPlay ? '#ef4444' : undefined, color: isAutoPlay ? '#ef4444' : undefined }}
             onClick={() => {
@@ -302,8 +326,8 @@ function HomeContent() {
             {isAutoPlay ? '⏹ DETENER AUTOMÁTICO' : '▶️ REPRODUCIR AUTOMÁTICO'}
           </button>
 
-          <button 
-            className="button button-secondary" 
+          <button
+            className="button button-secondary"
             style={{ width: '100%', color: '#ef4444' }}
             onClick={() => {
               setPreviewPhase('intro');
@@ -314,7 +338,7 @@ function HomeContent() {
           >
             <RotateCcw size={16} /> REINICIAR TODO
           </button>
-          
+
           <div style={{ marginTop: '12px', textAlign: 'center', fontSize: '0.8rem', opacity: 0.6, fontWeight: 900, textTransform: 'uppercase' }}>
             Fase Actual: {previewPhase}
           </div>
@@ -324,11 +348,11 @@ function HomeContent() {
           <h3>Grabación</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <p style={{ fontSize: '0.8rem', opacity: 0.8, textAlign: 'center' }}>
-               El botón <b>Siguiente</b> actúa como disparador de la ruleta cuando estás en la fase de Wheel.
+              El botón <b>Siguiente</b> actúa como disparador de la ruleta cuando estás en la fase de Wheel.
             </p>
-            
+
             {phraseScreenWinner && (
-              <button 
+              <button
                 className="button button-secondary"
                 style={{ width: '100%', borderColor: phraseScreenWinner.color }}
                 onClick={() => {
@@ -349,8 +373,8 @@ function HomeContent() {
             <Link href="/phrases" className="icon-action-button" title="Phrase Database">
               <Database size={20} /> Base de Datos
             </Link>
-            <button 
-              className="icon-action-button" 
+            <button
+              className="icon-action-button"
               style={{ color: '#ef4444' }}
               onClick={async () => {
                 if (confirm('¿Estás seguro de que quieres REINICIAR TODAS las frases de la base de datos?')) {
@@ -366,8 +390,8 @@ function HomeContent() {
             >
               <RefreshCw size={20} /> Reset BD
             </button>
-            <button 
-              className={`icon-action-button ${isSettingsOpen ? 'success' : ''}`} 
+            <button
+              className={`icon-action-button ${isSettingsOpen ? 'success' : ''}`}
               onClick={() => setIsSettingsOpen(!isSettingsOpen)}
             >
               <Settings size={20} /> Ajustes
@@ -381,7 +405,7 @@ function HomeContent() {
             <div className="settings-panel">
               <div className="design-grid">
                 {(['classic', 'triangle', 'pin', 'hand', 'star', 'kibo'] as ArrowDesignType[]).map(type => (
-                  <div 
+                  <div
                     key={type}
                     className={`design-card ${arrowDesign === type ? 'active' : ''}`}
                     onClick={() => setArrowDesign(type)}
@@ -397,23 +421,23 @@ function HomeContent() {
                     <span style={{ textTransform: 'capitalize' }}>{type}</span>
                   </div>
                 ))}
-                
-                <div 
+
+                <div
                   className={`design-card custom-upload ${arrowDesign === 'custom' ? 'active' : ''}`}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <div className="design-preview">
                     {customArrowUrl ? (
-                        <img src={customArrowUrl} alt="custom" />
+                      <img src={customArrowUrl} alt="custom" />
                     ) : (
                       <div style={{ fontSize: '24px' }}>📷</div>
                     )}
                   </div>
                   <span>Foto</span>
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    style={{ display: 'none' }} 
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
                     accept="image/*"
                     onChange={handleImageUpload}
                   />
@@ -425,7 +449,7 @@ function HomeContent() {
 
         <div className="dev-section" style={{ marginTop: 'auto', opacity: 0.6 }}>
           <p style={{ fontSize: '0.8rem' }}>
-            Grabación Optimizada: <b>ACTIVA</b><br/>
+            Grabación Optimizada: <b>ACTIVA</b><br />
             Zona Segura Redes Sociales: <b>SÍ</b>
           </p>
         </div>

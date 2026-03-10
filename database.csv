@@ -99,7 +99,7 @@ DINERO,No puedes comprar el cielo con dinero. – Proverbio.,FALSE,
 DINERO,La bolsa es un juego que consiste en pasar de mano en mano una brasa encendida. – Nathaniel Rothschild.,FALSE,
 DINERO,La prosperidad es el mejor protector de la paz. – James Madison.,FALSE,
 DINERO,"Al final, no importa cuánto dinero tengas, solo cuántas vidas tocaste. – Anónimo.",FALSE,
-AMOR,"Platón: Al contacto del amor, todo el mundo se vuelve poeta.",FALSE,
+AMOR,"Platón: Al contacto del amor, todo el mundo se vuelve poeta.",TRUE,2026-03-10
 AMOR,Aristóteles: El amor se compone de una sola alma que habita en dos cuerpos.,FALSE,
 AMOR,"Séneca: Si quieres ser amado, ama.",FALSE,
 AMOR,"Epicuro: No es tanto la ayuda de nuestros amigos lo que nos ayuda, sino la confianza de su ayuda.",FALSE,
@@ -499,15 +499,15 @@ EXITO,Menos es más. – Ludwig Mies van der Rohe.,FALSE,
 EXITO,"Pienso, luego existo. – René Descartes (el éxito de la conciencia).",FALSE,
 EXITO,Todo lo que siempre has querido está al otro lado del miedo. – George Addair.,FALSE,
 EXITO,El éxito es despertar cada mañana con el alma en paz. – Anónimo.,FALSE,
-FELICIDAD,Aristóteles: La felicidad depende de nosotros mismos.,TRUE,2026-03-10
-FELICIDAD,"Aristóteles: La felicidad es el significado y el propósito de la vida, todo el objetivo y el fin de la existencia humana.",TRUE,2026-03-10
-FELICIDAD,"Sócrates: El secreto de la felicidad no se encuentra en la búsqueda de más, sino en el desarrollo de la capacidad para disfrutar de menos.",TRUE,2026-03-10
-FELICIDAD,"Platón: El hombre que hace que todo lo que lleve a la felicidad dependa de él mismo, y no de los demás, ha adoptado el mejor plan para vivir feliz.",TRUE,2026-03-10
-FELICIDAD,"Epicuro: No es lo que tenemos, sino lo que disfrutamos, lo que constituye nuestra abundancia.",TRUE,2026-03-10
-FELICIDAD,"Epicuro: El que no considera lo que tiene como la riqueza más grande, es desdichado, aunque sea el dueño del mundo.",TRUE,2026-03-10
-FELICIDAD,"Séneca: La verdadera felicidad es disfrutar del presente, sin dependencia ansiosa sobre el futuro.",TRUE,2026-03-10
-FELICIDAD,"Séneca: Nadie puede vivir felizmente si solo se mira a sí mismo, si lo convierte todo en una cuestión de su propia utilidad.",TRUE,2026-03-10
-FELICIDAD,Marco Aurelio: La felicidad de tu vida depende de la calidad de tus pensamientos.,TRUE,2026-03-10
+FELICIDAD,Aristóteles: La felicidad depende de nosotros mismos.,FALSE,
+FELICIDAD,"Aristóteles: La felicidad es el significado y el propósito de la vida, todo el objetivo y el fin de la existencia humana.",FALSE,
+FELICIDAD,"Sócrates: El secreto de la felicidad no se encuentra en la búsqueda de más, sino en el desarrollo de la capacidad para disfrutar de menos.",FALSE,
+FELICIDAD,"Platón: El hombre que hace que todo lo que lleve a la felicidad dependa de él mismo, y no de los demás, ha adoptado el mejor plan para vivir feliz.",FALSE,
+FELICIDAD,"Epicuro: No es lo que tenemos, sino lo que disfrutamos, lo que constituye nuestra abundancia.",FALSE,
+FELICIDAD,"Epicuro: El que no considera lo que tiene como la riqueza más grande, es desdichado, aunque sea el dueño del mundo.",FALSE,
+FELICIDAD,"Séneca: La verdadera felicidad es disfrutar del presente, sin dependencia ansiosa sobre el futuro.",FALSE,
+FELICIDAD,"Séneca: Nadie puede vivir felizmente si solo se mira a sí mismo, si lo convierte todo en una cuestión de su propia utilidad.",FALSE,
+FELICIDAD,Marco Aurelio: La felicidad de tu vida depende de la calidad de tus pensamientos.,FALSE,
 FELICIDAD,"Marco Aurelio: Muy poco se necesita para hacer una vida feliz; está todo dentro de ti mismo, en tu forma de pensar.",FALSE,
 FELICIDAD,Epicteto: Solo hay un camino hacia la felicidad y es dejar de preocuparse por las cosas que están más allá del poder de nuestra voluntad.,FALSE,
 FELICIDAD,"Epicteto: La felicidad no consiste en adquirir y gozar, sino en no desear nada.",FALSE,

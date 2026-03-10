@@ -90,8 +90,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
     if (phase === 'monthly-overview' && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
 
-      // Transition whoosh sound
-      soundManager.playAirWhoosh();
+      // Transition whoosh sound moved to page.tsx onClick for instant start
 
       // Force start at bottom instantly
       container.scrollTop = container.scrollHeight + 1000; // Extra buffer to ensure bottom
@@ -162,9 +161,22 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
         soundManager.playPhraseReveal(); // phrase_sound.wav
       }, 1500);
 
+      // 4. Urgency Sound & Automatic Transition (Manual controls ignored for this dramatic sequence)
+      // Author animation starts at 1.8s. Waiting 3s after that = 4.8s.
+      const urgencyTimer = setTimeout(() => {
+        soundManager.playUrgency(); // arcade-tick.wav
+      }, 4800);
+
+      // Transition to CTA 1 second after urgency sound starts
+      const finalTransitionTimer = setTimeout(() => {
+        setPhase('cta');
+      }, 5800);
+
       return () => {
         clearTimeout(badgeTimer);
         clearTimeout(phraseTimer);
+        clearTimeout(urgencyTimer);
+        clearTimeout(finalTransitionTimer);
       };
     }
   }, [phase]);
@@ -182,20 +194,19 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
       // Safety: if for some reason we are already at 4 and it's not today's phrase, don't over-count
       if (oldCount >= 4 && !isAlreadyCounted) return;
 
-      // Sequence start
+      // Sequence start: Wait for expansion sound (Point 3) to finish before starting Point 4
       const startTimer = setTimeout(() => {
-        // 1. First, increment the count badge (only if it makes sense)
+        // 1. Point 4: Increment the count badge
         if (oldCount < 4) {
           setIsCountIncreased(true);
           soundManager.playTick();
         }
 
-        // 2. Wait for count animation to settle, then start highlights
-        setTimeout(() => {
+        // 2. Wait for Point 4 (count animation) to finish completely before starting Point 5
+        const highlightTimer = setTimeout(() => {
           let current = 0;
           const interval = setInterval(() => {
             // Highlight existing (already revealed) phrases 
-            // (We highlight up to oldCount)
             if (current < oldCount) {
               setHighlightedIndex(current);
               soundManager.playTick();
@@ -207,12 +218,12 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
               soundManager.playTransition(); // Reveal sound
 
               clearInterval(interval);
-
-              // Auto-advance removed as per user request for manual control
             }
           }, 450);
-        }, 1000);
-      }, 1000);
+        }, 500);
+
+        return () => clearTimeout(highlightTimer);
+      }, 2500);
 
       return () => clearTimeout(startTimer);
     }
@@ -596,6 +607,26 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                 >
                   — {extractAuthor(revealedPhrase)}
                 </motion.p>
+
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: 'spring', delay: 2.2 }}
+                  style={{ marginTop: '30px', display: 'flex', justifyContent: 'center' }}
+                >
+                  <img
+                    src={`/images/topics/topic_${topicId.toLowerCase()}.png`}
+                    alt={topicId}
+                    style={{
+                      width: '240px',
+                      height: '240px',
+                      objectFit: 'cover',
+                      borderRadius: '24px',
+                      boxShadow: `0 20px 40px rgba(0,0,0,0.5), 0 0 20px ${topicColor}40`,
+                      border: `2px solid ${topicColor}60`
+                    }}
+                  />
+                </motion.div>
               </motion.div>
 
               <motion.div
