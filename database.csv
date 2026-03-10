@@ -15,10 +15,10 @@ DINERO,El dinero es una garantía de que tendremos lo que queramos en el futuro.
 DINERO,El oro hace que lo feo parezca hermoso. – Molière.,FALSE,
 DINERO,El dinero es el gran nivelador. – Thomas Carlyle.,FALSE,
 DINERO,Un banco es un lugar donde te prestan un paraguas cuando hace buen tiempo y te lo piden cuando empieza a llover. – Robert Frost.,FALSE,
-DINERO,"El dinero es como el agua: si no corre, se estanca y se pudre. – Refrán anónimo.",TRUE,2026-03-09
+DINERO,"El dinero es como el agua: si no corre, se estanca y se pudre. – Refrán anónimo.",FALSE,
 DINERO,"El dinero no cambia a la gente, solo la desenmascara. – Henry Ford.",FALSE,
 DINERO,El dinero habla un lenguaje que todas las naciones entienden. – Aphra Behn.,FALSE,
-DINERO,"El dinero es un sirviente increíble, pero un amo terrible. – Francis Bacon.",TRUE,2026-03-09
+DINERO,"El dinero es un sirviente increíble, pero un amo terrible. – Francis Bacon.",FALSE,
 DINERO,"La riqueza no consiste en tener grandes posesiones, sino en tener pocas necesidades. – Epicteto.",FALSE,
 DINERO,"El sabio no ama la riqueza, pero prefiere tenerla. – Séneca.",FALSE,
 DINERO,La riqueza es la esclava del sabio y la dueña del necio. – Séneca.,FALSE,
@@ -28,7 +28,7 @@ DINERO,"La pobreza no viene por la disminución de las riquezas, sino por la mul
 DINERO,"Muchos hombres no poseen su riqueza, su riqueza los posee a ellos. – Robert G. Ingersoll.",FALSE,
 DINERO,El hombre que tiene poco no es pobre; el que desea mucho es el verdadero pobre. – Séneca.,FALSE,
 DINERO,La riqueza de un hombre se mide por la cantidad de cosas de las que puede prescindir. – Henry David Thoreau.,FALSE,
-DINERO,"Si quieres ser rico, no te afanes en aumentar tus bienes, sino en disminuir tu codicia. – Epicuro.",TRUE,2026-03-09
+DINERO,"Si quieres ser rico, no te afanes en aumentar tus bienes, sino en disminuir tu codicia. – Epicuro.",FALSE,
 DINERO,"La verdadera riqueza consiste en el uso, no en la posesión. – Esopo.",FALSE,
 DINERO,El dinero es una de las cosas más baratas. Lo más caro es lo que no se puede comprar. – Proverbio oriental.,FALSE,
 DINERO,¿Quién es rico? El que se regocija en su porción. – El Talmud.,FALSE,
@@ -76,7 +76,7 @@ DINERO,La especulación es solo una palabra para designar la esperanza de los to
 DINERO,"Donde hay dinero, hay demonios. – San Jerónimo.",FALSE,
 DINERO,La propiedad es un robo. – Pierre-Joseph Proudhon.,FALSE,
 DINERO,El capital no tiene patria. – Napoleón Bonaparte.,FALSE,
-DINERO,La riqueza consiste mucho más en el disfrute que en la posesión. – Aristóteles.,TRUE,2026-03-09
+DINERO,La riqueza consiste mucho más en el disfrute que en la posesión. – Aristóteles.,FALSE,
 DINERO,El que tiene dinero tiene en el bolsillo a los que no lo tienen. – León Tolstói.,FALSE,
 DINERO,"Si el dinero es tu esperanza de independencia, nunca la tendrás. – Henry Ford.",FALSE,
 DINERO,El tiempo es dinero. – Benjamin Franklin.,FALSE,
@@ -106,7 +106,7 @@ AMOR,"Epicuro: No es tanto la ayuda de nuestros amigos lo que nos ayuda, sino la
 AMOR,"Platón: El amor es la alegría de los buenos, la reflexión de los sabios, el asombro de los incrédulos.",FALSE,
 AMOR,San Agustín: La medida del amor es amar sin medida.,FALSE,
 AMOR,Cicerón: Nadie hay que no ame; la cuestión es qué es lo que ama.,FALSE,
-AMOR,"Plutarco: Donde no hay amor, no hay dolor.",TRUE,2026-03-09
+AMOR,"Plutarco: Donde no hay amor, no hay dolor.",FALSE,
 AMOR,Sófocles: Una palabra nos libera de todo el peso y el dolor de la vida: esa palabra es amor.,FALSE,
 AMOR,Platón: El amor es una enfermedad mental grave. (Incluso los genios tienen sus días cínicos).,FALSE,
 AMOR,"Friedrich Nietzsche: Lo que se hace por amor, ocurre siempre más allá del bien y del mal.",FALSE,
@@ -116,10 +116,10 @@ AMOR,Baruch Spinoza: El amor es una alegría acompañada por la idea de una caus
 AMOR,"Arthur Schopenhauer: Todo amor, por etéreo que quiera ser, tiene sus raíces en el instinto sexual.",FALSE,
 AMOR,José Ortega y Gasset: En el amor nos parece que nos hemos quedado solos con el universo.,FALSE,
 AMOR,"Immanuel Kant: El corazón humano tiene un deseo de amor, pero también un deseo de independencia.",FALSE,
-AMOR,Blaise Pascal: El corazón tiene razones que la razón no entiende.,TRUE,2026-03-09
+AMOR,Blaise Pascal: El corazón tiene razones que la razón no entiende.,FALSE,
 AMOR,"Søren Kierkegaard: El amor es todo, es la mayor alegría, pero es también el dolor más profundo.",FALSE,
 AMOR,"Friedrich Nietzsche: No es la falta de amor, sino la falta de amistad lo que hace que los matrimonios sean infelices.",FALSE,
-AMOR,Erich Fromm: El amor infantil sigue el principio: 'Amo porque me aman'. El amor maduro sigue el principio: 'Me aman porque amo'.,TRUE,2026-03-09
+AMOR,Erich Fromm: El amor infantil sigue el principio: 'Amo porque me aman'. El amor maduro sigue el principio: 'Me aman porque amo'.,FALSE,
 AMOR,Antoine de Saint-Exupéry: Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.,FALSE,
 AMOR,Gabriel Marcel: Amar a alguien es decirle: tú no morirás jamás.,FALSE,
 AMOR,"Stendhal: El amor es una flor deliciosa, pero es preciso tener el valor de ir a buscarla al borde de un precipicio horrible.",FALSE,
@@ -306,7 +306,7 @@ SALUD,Parte de la curación está en la voluntad de sanar. – Séneca,FALSE,
 SALUD,"La salud no es un bien que se posee, sino una armonía que se mantiene. – Plotino",FALSE,
 SALUD,"El médico cura, la naturaleza sana. – Aristóteles",FALSE,
 SALUD,No se puede curar el cuerpo sin curar el alma. – Sócrates,FALSE,
-SALUD,"La enfermedad es un impedimento para el cuerpo, pero no para la voluntad. – Epicteto",TRUE,2026-03-09
+SALUD,"La enfermedad es un impedimento para el cuerpo, pero no para la voluntad. – Epicteto",FALSE,
 SALUD,Nada es tan perjudicial para la salud como el cambio frecuente de remedios. – Séneca,FALSE,
 SALUD,"La vida no es solo vivir, sino estar bien. – Marcial",FALSE,
 SALUD,"La brevedad de la vida no es el problema, sino el desperdicio de la salud. – Séneca",FALSE,
@@ -499,15 +499,15 @@ EXITO,Menos es más. – Ludwig Mies van der Rohe.,FALSE,
 EXITO,"Pienso, luego existo. – René Descartes (el éxito de la conciencia).",FALSE,
 EXITO,Todo lo que siempre has querido está al otro lado del miedo. – George Addair.,FALSE,
 EXITO,El éxito es despertar cada mañana con el alma en paz. – Anónimo.,FALSE,
-FELICIDAD,Aristóteles: La felicidad depende de nosotros mismos.,FALSE,
-FELICIDAD,"Aristóteles: La felicidad es el significado y el propósito de la vida, todo el objetivo y el fin de la existencia humana.",FALSE,
-FELICIDAD,"Sócrates: El secreto de la felicidad no se encuentra en la búsqueda de más, sino en el desarrollo de la capacidad para disfrutar de menos.",FALSE,
-FELICIDAD,"Platón: El hombre que hace que todo lo que lleve a la felicidad dependa de él mismo, y no de los demás, ha adoptado el mejor plan para vivir feliz.",FALSE,
-FELICIDAD,"Epicuro: No es lo que tenemos, sino lo que disfrutamos, lo que constituye nuestra abundancia.",FALSE,
-FELICIDAD,"Epicuro: El que no considera lo que tiene como la riqueza más grande, es desdichado, aunque sea el dueño del mundo.",FALSE,
-FELICIDAD,"Séneca: La verdadera felicidad es disfrutar del presente, sin dependencia ansiosa sobre el futuro.",FALSE,
-FELICIDAD,"Séneca: Nadie puede vivir felizmente si solo se mira a sí mismo, si lo convierte todo en una cuestión de su propia utilidad.",FALSE,
-FELICIDAD,Marco Aurelio: La felicidad de tu vida depende de la calidad de tus pensamientos.,FALSE,
+FELICIDAD,Aristóteles: La felicidad depende de nosotros mismos.,TRUE,2026-03-10
+FELICIDAD,"Aristóteles: La felicidad es el significado y el propósito de la vida, todo el objetivo y el fin de la existencia humana.",TRUE,2026-03-10
+FELICIDAD,"Sócrates: El secreto de la felicidad no se encuentra en la búsqueda de más, sino en el desarrollo de la capacidad para disfrutar de menos.",TRUE,2026-03-10
+FELICIDAD,"Platón: El hombre que hace que todo lo que lleve a la felicidad dependa de él mismo, y no de los demás, ha adoptado el mejor plan para vivir feliz.",TRUE,2026-03-10
+FELICIDAD,"Epicuro: No es lo que tenemos, sino lo que disfrutamos, lo que constituye nuestra abundancia.",TRUE,2026-03-10
+FELICIDAD,"Epicuro: El que no considera lo que tiene como la riqueza más grande, es desdichado, aunque sea el dueño del mundo.",TRUE,2026-03-10
+FELICIDAD,"Séneca: La verdadera felicidad es disfrutar del presente, sin dependencia ansiosa sobre el futuro.",TRUE,2026-03-10
+FELICIDAD,"Séneca: Nadie puede vivir felizmente si solo se mira a sí mismo, si lo convierte todo en una cuestión de su propia utilidad.",TRUE,2026-03-10
+FELICIDAD,Marco Aurelio: La felicidad de tu vida depende de la calidad de tus pensamientos.,TRUE,2026-03-10
 FELICIDAD,"Marco Aurelio: Muy poco se necesita para hacer una vida feliz; está todo dentro de ti mismo, en tu forma de pensar.",FALSE,
 FELICIDAD,Epicteto: Solo hay un camino hacia la felicidad y es dejar de preocuparse por las cosas que están más allá del poder de nuestra voluntad.,FALSE,
 FELICIDAD,"Epicteto: La felicidad no consiste en adquirir y gozar, sino en no desear nada.",FALSE,
@@ -523,7 +523,7 @@ FELICIDAD,"Confucio: Cuanto más medita el hombre en los buenos pensamientos, me
 FELICIDAD,"Confucio: Todos los hombres desean la felicidad, pero pocos la buscan en la moderación.",FALSE,
 FELICIDAD,Zhuangzi: La felicidad es la ausencia de la búsqueda de la felicidad.,FALSE,
 FELICIDAD,"Rumi: Tu tarea no es buscar el amor, sino simplemente buscar y encontrar todas las barreras dentro de ti que has construido contra él.",FALSE,
-FELICIDAD,"Mahatma Gandhi: La felicidad es cuando lo que piensas, lo que dices y lo que haces están en armonía.",TRUE,2026-03-09
+FELICIDAD,"Mahatma Gandhi: La felicidad es cuando lo que piensas, lo que dices y lo que haces están en armonía.",FALSE,
 FELICIDAD,Jiddu Krishnamurti: La felicidad es extraña; llega cuando no la buscas.,FALSE,
 FELICIDAD,"Lin Yutang: Si puedes pasar una tarde perfectamente inútil de una manera perfectamente inútil, has aprendido a vivir.",FALSE,
 FELICIDAD,"Kahlil Gibran: Vuestros hijos no son vuestros hijos... ellos vienen a través de ti, pero no de ti. (Sobre la felicidad de la libertad).",FALSE,
@@ -586,7 +586,7 @@ FELICIDAD,"Benjamin Franklin: La felicidad humana no se logra con grandes golpes
 FELICIDAD,Ernest Hemingway: La felicidad en la gente inteligente es la cosa más rara que conozco.,FALSE,
 FELICIDAD,George Bernard Shaw: No tenemos más derecho a consumir felicidad sin producirla que a consumir riqueza sin producirla.,FALSE,
 FELICIDAD,"Winston Churchill: El éxito no es el final, el fracaso no es fatal: es el coraje para continuar lo que cuenta.",FALSE,
-FELICIDAD,"Eleanor Roosevelt: Alguien me preguntó una vez cuál creía que era la cualidad más importante para ser feliz, y respondí: 'La capacidad de asombro'.",TRUE,2026-03-09
+FELICIDAD,"Eleanor Roosevelt: Alguien me preguntó una vez cuál creía que era la cualidad más importante para ser feliz, y respondí: 'La capacidad de asombro'.",FALSE,
 FELICIDAD,Anatole France: Es mejor entender poco que entender mal.,FALSE,
 FELICIDAD,Graham Greene: Siempre hay un momento en la infancia cuando la puerta se abre y deja entrar al futuro.,FALSE,
 FELICIDAD,Gabriel García Márquez: No hay medicina que cure lo que no cura la felicidad.,FALSE,
@@ -694,7 +694,7 @@ TIEMPO,William Faulkner: El pasado nunca muere. Ni siquiera es pasado.,FALSE,
 TIEMPO,"Friedrich Schiller: Tres veces camina el tiempo: lento el futuro, veloz el presente, inmóvil el pasado.",FALSE,
 TIEMPO,"Anaximandro: Las cosas perecen según la necesidad, pues se rinden cuentas por sus injusticias según el orden del tiempo.",FALSE,
 TIEMPO,Paul Valéry: El problema de nuestro tiempo es que el futuro ya no es lo que solía ser.,FALSE,
-TIEMPO,Henry David Thoreau: El tiempo no es sino el río en el que voy a pescar.,TRUE,2026-03-09
+TIEMPO,Henry David Thoreau: El tiempo no es sino el río en el que voy a pescar.,FALSE,
 TIEMPO,"Emil Cioran: Estamos todos en el fondo de un infierno, cada instante del cual es un milagro.",FALSE,
 TIEMPO,"Sigmund Freud: En el inconsciente, el tiempo no existe.",FALSE,
 TIEMPO,"Ludwig Wittgenstein: Si por eternidad se entiende no una duración infinita sino la falta de tiempo, entonces vive eternamente quien vive en el presente.",FALSE,

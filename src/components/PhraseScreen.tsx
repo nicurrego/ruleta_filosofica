@@ -20,7 +20,7 @@ interface PhraseScreenProps {
   forcePhase?: string;
 }
 
-type Phase = 'loading' | 'monthly-overview' | 'candidate-reveal' | 'scarcity' | 'cta';
+type Phase = 'loading' | 'monthly-overview' | 'candidate-reveal' | 'cta';
 
 export default function PhraseScreen({ topicId, topicColor, forcePhase }: PhraseScreenProps) {
   const [allRows, setAllRows] = useState<PhraseRow[]>([]);
@@ -75,6 +75,13 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
           ? { ...r, USADA: 'TRUE', FECHA_USADA: today }
           : r
       ));
+
+      // Sync with CSV database
+      fetch('/api/phrases', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tema: topicId, frase: todayPhrase })
+      }).catch(err => console.error('Failed to sync phrase use:', err));
     }
   }, [phase, topicId, todayPhrase]);
 
@@ -129,46 +136,87 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
     }
   }, [phase]);
 
+  // Handle Phase Resets for Animation Reruns
+  useEffect(() => {
+    if (phase === 'monthly-overview') {
+      // Clear reveal states so animation can rerun from scratch
+      setIsWinnerExpanded(false);
+      setIsCountIncreased(false);
+      setHighlightedIndex(-1);
+    }
+  }, [phase]);
+
+  // Handle Candidate Reveal Audio-Visual Sequence
+  useEffect(() => {
+    if (phase === 'candidate-reveal') {
+      // 1. Initial Transition Sound
+      soundManager.playWin(); // wheel-win.wav
+
+      // 2. Ganador Badge Sound
+      const badgeTimer = setTimeout(() => {
+        soundManager.playIntroNotification(); // ruleta_filosofica_notification.wav
+      }, 500);
+
+      // 3. Phrase/Author Sound
+      const phraseTimer = setTimeout(() => {
+        soundManager.playPhraseReveal(); // phrase_sound.wav
+      }, 1500);
+
+      return () => {
+        clearTimeout(badgeTimer);
+        clearTimeout(phraseTimer);
+      };
+    }
+  }, [phase]);
+
   // Handle Highlight Sequence after Winner Expansion
   useEffect(() => {
     if (isWinnerExpanded && phase === 'monthly-overview') {
       const winnerStats = getTopicMonthStats(topicId);
-      const oldCount = winnerStats.used;
-      
+      // If the phrase is already marked as used in allRows, 
+      // the base count already includes it. We only animate the +1 
+      // if we haven't 'counted' it yet in this specific animation run.
+      const isAlreadyCounted = winnerStats.usedPhrases.includes(todayPhrase);
+      const oldCount = isAlreadyCounted ? winnerStats.used - 1 : winnerStats.used;
+
+      // Safety: if for some reason we are already at 4 and it's not today's phrase, don't over-count
+      if (oldCount >= 4 && !isAlreadyCounted) return;
+
       // Sequence start
       const startTimer = setTimeout(() => {
-        // 1. First, animate the count increase
-        setIsCountIncreased(true);
-        soundManager.playTick(); // Small pop sound for the count
-        
-        // 2. Wait for count animation to settle
+        // 1. First, increment the count badge (only if it makes sense)
+        if (oldCount < 4) {
+          setIsCountIncreased(true);
+          soundManager.playTick();
+        }
+
+        // 2. Wait for count animation to settle, then start highlights
         setTimeout(() => {
           let current = 0;
           const interval = setInterval(() => {
-            // Highlight existing (already revealed) phrases
+            // Highlight existing (already revealed) phrases 
+            // (We highlight up to oldCount)
             if (current < oldCount) {
               setHighlightedIndex(current);
               soundManager.playTick();
               current++;
-            } 
-            // Finally highlight and unblur TODAY'S phrase
+            }
+            // 3. Finally highlight and unblur TODAY'S phrase
             else if (current === oldCount) {
               setHighlightedIndex(current);
-              soundManager.playTransition();
+              soundManager.playTransition(); // Reveal sound
+
               clearInterval(interval);
-              
-              // Auto-advance to next phase after a longer pause on the unblurred phrase
-              setTimeout(() => {
-                setPhase('candidate-reveal');
-              }, 2500);
+
+              // Auto-advance removed as per user request for manual control
             }
           }, 450);
-        }, 800);
+        }, 1000);
       }, 1000);
 
       return () => clearTimeout(startTimer);
     }
-  }, [isWinnerExpanded]);
+  }, [isWinnerExpanded, phase]);
 
   const currentMonthName = new Date().toLocaleString('es-ES', { month: 'long' });
   const nextMonthName = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleString('es-ES', { month: 'long' });
@@ -199,7 +247,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
   const injectEmojis = (text: string, tId: string) => {
     if (!text) return '';
     let result = text;
-    
+
     const mapping: Record<string, Record<string, string>> = {
       'TIEMPO': { 'tiempo': '⏳', 'reloj': '⏰', 'vida': '🌳', 'días': '📅', 'momento': '✨' },
       'DINERO': { 'dinero': '💰', 'riqueza': '💎', 'rico': '💸', 'oro': '🥇', 'pobre': '🏚️' },
@@ -253,14 +301,14 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
     `
   };
 
-  const renderTopicList = (isScarcity = false) => (
+  const renderTopicList = () => (
     <div
       className="phrase-content"
       ref={scrollContainerRef}
       style={{
         maxWidth: '400px',
         width: '100%',
-        padding: isScarcity ? '0 24px 100px' : '40px 24px 100px',
+        padding: '40px 24px 100px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -293,7 +341,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
         {sortedTopics.map((topic) => {
           const stats = getTopicMonthStats(topic.id);
           const isWinner = topic.id === topicId;
-          const showOtherTopics = !isWinnerExpanded || isScarcity;
+          const showOtherTopics = !isWinnerExpanded;
 
           return (
             <motion.div
@@ -310,8 +358,8 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                 scale: (isWinner && isWinnerExpanded) ? 1.05 : 1,
                 width: (isWinner && isWinnerExpanded) ? '112%' : '100%',
                 x: (isWinner && isWinnerExpanded) ? '-6%' : '0%',
-                boxShadow: (isWinner && isWinnerExpanded) 
-                  ? `0 30px 60px rgba(0,0,0,0.6), 0 0 40px ${topic.color}40` 
+                boxShadow: (isWinner && isWinnerExpanded)
+                  ? `0 30px 60px rgba(0,0,0,0.6), 0 0 40px ${topic.color}40`
                   : '0 0 0px rgba(0,0,0,0)',
                 display: (isWinner || showOtherTopics) ? 'flex' : 'none'
               }}
@@ -335,24 +383,24 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                     {topic.label}
                   </span>
                 </div>
-                <motion.div 
+                <motion.div
                   key={isCountIncreased ? 'new-count' : 'old-count'}
                   initial={{ scale: 1.2, color: topic.color }}
                   animate={{ scale: 1, color: isWinner ? topic.color : 'var(--text-muted)' }}
                   style={{ fontSize: '0.65rem', fontWeight: 900 }}
                 >
-                  {isWinner 
-                    ? `${stats.used + (isCountIncreased ? 1 : 0)}/4 REVELADAS`
+                  {isWinner
+                    ? `${Math.min(4, stats.used + (isCountIncreased ? 1 : 0))}/4 REVELADAS`
                     : stats.used === 4 ? 'COMPLETADO' : `${stats.used}/4 REVELADAS`
                   }
                 </motion.div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 layout
-                style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: (isWinner && isWinnerExpanded) ? '1fr' : 'repeat(2, 1fr)', 
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: (isWinner && isWinnerExpanded) ? '1fr' : 'repeat(2, 1fr)',
                   gap: '12px',
                   width: '100%'
                 }}
@@ -360,17 +408,17 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                 {Array.from({ length: 4 }).map((_, slotIdx) => {
                   const isUsed = slotIdx < stats.used;
                   // The "today" slot is the one exactly at stats.used (e.g. if 0 used, slot 0 is today)
-                  const isCurrentReveal = isWinner && slotIdx === stats.used && todayPhrase && !isScarcity;
+                  const isCurrentReveal = isWinner && slotIdx === stats.used && todayPhrase;
                   const isUpcoming = slotIdx > stats.used;
                   const phrase = isUsed ? (stats.usedPhrases[slotIdx] || '') : (isCurrentReveal ? todayPhrase : '');
                   const author = (isUsed || isCurrentReveal) ? extractAuthor(phrase) : '';
                   const rawSummary = (isUsed || isCurrentReveal) ? truncatePhrase(phrase, 6) : '';
                   // Apply emojis ONLY to historical phrases (not today's reveal)
                   const summary = (isUsed && !isCurrentReveal) ? injectEmojis(rawSummary, topic.id) : rawSummary;
-                  
+
                   const isHighlighted = isWinner && slotIdx === highlightedIndex;
                   const isFinalHighlight = isHighlighted && isCurrentReveal;
-                  const isBlurred = isCurrentReveal && !isScarcity && (highlightedIndex < slotIdx);
+                  const isBlurred = isCurrentReveal && (highlightedIndex < slotIdx);
 
                   return (
                     <motion.div
@@ -380,10 +428,10 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                         borderColor: isFinalHighlight ? '#fbbf24' : isHighlighted ? '#10b981' : isCurrentReveal ? `${topic.color}80` : 'rgba(255,255,255,0.05)',
                         borderWidth: isFinalHighlight ? 4 : isHighlighted ? 3 : 1,
                         scale: isFinalHighlight ? [1, 1.15, 1.1] : isHighlighted ? 1.05 : 1,
-                        boxShadow: isFinalHighlight 
-                          ? '0 0 35px rgba(251, 191, 36, 0.5), inset 0 0 15px rgba(251, 191, 36, 0.2)' 
-                          : isHighlighted ? '0 0 20px rgba(16, 185, 129, 0.3)' 
-                          : 'none',
+                        boxShadow: isFinalHighlight
+                          ? '0 0 35px rgba(251, 191, 36, 0.5), inset 0 0 15px rgba(251, 191, 36, 0.2)'
+                          : isHighlighted ? '0 0 20px rgba(16, 185, 129, 0.3)'
+                            : 'none',
                       }}
                       transition={{
                         scale: isFinalHighlight ? { repeat: Infinity, duration: 0.6 } : { duration: 0.2 }
@@ -413,7 +461,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                       </div>
 
                       {isUsed && (
-                        <motion.p 
+                        <motion.p
                           initial={false}
                           animate={{
                             filter: isBlurred ? 'blur(8px)' : 'blur(0px)',
@@ -421,13 +469,13 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                             scale: isBlurred ? 0.95 : 1
                           }}
                           style={{
-                          fontSize: (isWinner && isWinnerExpanded) ? '0.75rem' : '0.6rem',
-                          color: 'white',
-                          lineHeight: '1.3',
-                          textAlign: 'center',
-                          margin: 0,
-                          fontWeight: isCurrentReveal ? 700 : 400
-                        }}>
+                            fontSize: (isWinner && isWinnerExpanded) ? '0.75rem' : '0.6rem',
+                            color: 'white',
+                            lineHeight: '1.3',
+                            textAlign: 'center',
+                            margin: 0,
+                            fontWeight: isCurrentReveal ? 700 : 400
+                          }}>
                           {summary}
                         </motion.p>
                       )}
@@ -444,8 +492,8 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
 
 
   return (
-    <div 
-      className="phrase-screen-overlay" 
+    <div
+      className="phrase-screen-overlay"
       style={{
         ...dynamicBackground,
         overflow: isWinnerExpanded ? 'visible' : 'hidden'
@@ -468,9 +516,9 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
           <motion.div
             key="overview"
             className="phase-container"
-            style={{ 
-              width: '100%', 
-              height: '100%', 
+            style={{
+              width: '100%',
+              height: '100%',
               overflow: isWinnerExpanded ? 'visible' : 'hidden',
               position: 'relative',
               zIndex: 10
@@ -480,10 +528,9 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {renderTopicList(false)}
+            {renderTopicList()}
           </motion.div>
         )}
-
         {phase === 'candidate-reveal' && (
           <motion.div
             key="reveal"
@@ -525,7 +572,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: 'spring', delay: 0.8 }}
+                transition={{ type: 'spring', delay: 1.5 }}
                 style={{ position: 'relative' }}
               >
                 <div style={{ position: 'absolute', inset: -40, background: `radial-gradient(circle, ${topicColor}30 0%, transparent 70%)`, filter: 'blur(30px)', zIndex: -1 }} />
@@ -544,7 +591,7 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5 }}
+                  transition={{ delay: 1.8 }}
                   style={{ marginTop: '20px', color: topicColor, fontSize: '1.1rem', fontWeight: 600 }}
                 >
                   — {extractAuthor(revealedPhrase)}
@@ -560,20 +607,6 @@ export default function PhraseScreen({ topicId, topicColor, forcePhase }: Phrase
                 <ChevronRight size={32} color="white" className="animate-bounce" />
               </motion.div>
             </div>
-          </motion.div>
-        )}
-
-        {phase === 'scarcity' && (
-          <motion.div
-            key="scarcity"
-            className="phase-container"
-            style={{ width: '100%', height: '100%' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {renderTopicList(true)}
           </motion.div>
         )}
 

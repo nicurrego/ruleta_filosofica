@@ -27,7 +27,6 @@ const PREVIEW_PHASES = [
   'wheel',
   'monthly-overview',
   'candidate-reveal',
-  'scarcity',
   'cta'
 ] as const;
 
@@ -121,9 +120,6 @@ function HomeContent() {
         advance('candidate-reveal', 5000);
         break;
       case 'candidate-reveal':
-        advance('scarcity', 5000);
-        break;
-      case 'scarcity':
         advance('cta', 5000);
         break;
       case 'cta':
@@ -241,8 +237,8 @@ function HomeContent() {
             >
               <PhraseScreen 
                 key={phraseScreenWinner?.id || previewPhase}
-                topicId={phraseScreenWinner?.id || winner?.id || (previewPhase === 'monthly-overview' ? 'DINERO' : previewPhase === 'scarcity' ? 'ANSIEDAD' : 'EXITO')} 
-                topicColor={phraseScreenWinner?.color || winner?.color || (previewPhase === 'monthly-overview' ? '#00ffa3' : previewPhase === 'scarcity' ? '#7a5fff' : '#ffbd00')} 
+                topicId={phraseScreenWinner?.id || winner?.id || (previewPhase === 'monthly-overview' ? 'DINERO' : 'EXITO')} 
+                topicColor={phraseScreenWinner?.color || winner?.color || (previewPhase === 'monthly-overview' ? '#00ffa3' : '#ffbd00')} 
                 onClose={() => { setPhraseScreenWinner(null); setWinner(null); setPreviewPhase('wheel'); }}
                 forcePhase={previewPhase && !['intro', 'wheel'].includes(previewPhase) ? (previewPhase as any) : undefined}
               />

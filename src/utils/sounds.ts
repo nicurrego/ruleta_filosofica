@@ -10,6 +10,7 @@ export class SoundManager {
   private airWhooshAudio: HTMLAudioElement | null = null;
   private scrollSwooshAudio: HTMLAudioElement | null = null;
   private winnerExpansionAudio: HTMLAudioElement | null = null;
+  private phraseRevealAudio: HTMLAudioElement | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -37,6 +38,7 @@ export class SoundManager {
       this.airWhooshAudio = new Audio('/air_whoosh_to_mothly_overview.wav');
       this.scrollSwooshAudio = new Audio('/scroll_up_swoosh.wav');
       this.winnerExpansionAudio = new Audio('/winner_topic_2colum_1column.wav');
+      this.phraseRevealAudio = new Audio('/phrase_sound.wav');
     }
   }
 
@@ -124,6 +126,13 @@ export class SoundManager {
     if (this.winnerExpansionAudio) {
       this.winnerExpansionAudio.currentTime = 0;
       this.winnerExpansionAudio.play().catch(e => console.error('Winner Expansion play failed', e));
+    }
+  }
+
+  public playPhraseReveal() {
+    if (this.phraseRevealAudio) {
+      this.phraseRevealAudio.currentTime = 0;
+      this.phraseRevealAudio.play().catch(e => console.error('Phrase Reveal play failed', e));
     }
   }
 }
